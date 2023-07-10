@@ -25,11 +25,12 @@ class WorkerThread(QThread):
       
         output_file = inp
 
-        with open(output_file, 'w', newline='') as file:
+        with open(output_file, 'w', encoding='ISO-8859-1', newline='') as file:
             writer = csv.writer(file, delimiter=';')
             writer.writerows(unique_rows)
 
         print(f"Redundancies removed. Cleaned data saved to {output_file}")
+        
 
     def run(self):
 
