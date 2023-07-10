@@ -55,7 +55,7 @@ After selecting the file, the scraper will generate a CSV file with the extracte
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
 ## License
-  This project is licensed under the MIT License.
+  This project is licensed under the [MIT License](LICENSE).
   Feel free to modify and customize the README to better suit your project.
 
 
