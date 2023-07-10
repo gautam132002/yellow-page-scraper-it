@@ -38,7 +38,7 @@ class WorkerThread(QThread):
 
         f = open(save_path, "w", encoding="utf-8", newline="")
         writer = csv.writer(f,delimiter=';')
-        writer.writerow(["RAGIONE SOCIALE"," INDIRIZZO","PROVINCIA","COMUNE","CAP","TELEFONO", "WHATSAPP", "EMAIL", "SITO INTERNET","DETAILS LINK"])
+        writer.writerow(["ATTIVITA","DOVE","RAGIONE SOCIALE"," INDIRIZZO","PROVINCIA","COMUNE","CAP","CODLOC","TELEFONO", "WHATSAPP", "EMAIL", "SITO INTERNET","DETAILS LINK"])
 
         with open(self.file_path, 'r', encoding='ISO-8859-1') as csvfile:
             # Create a CSV reader object with semicolon delimiter
@@ -81,15 +81,23 @@ class WorkerThread(QThread):
                         # Get the JSON response as a dictionary
                         json_data = response.json()
 
+                        if json_data['error'] != {}:
+                            print("no data present in page")
+                            break
                         # Check if the data exists
                         if 'list' in json_data and 'out' in json_data['list'] and 'base' in json_data['list']['out']:
                             json_info = json_data['list']['out']['base']['results']
+
+                            if len(json_info) == 0:
+                                break
+
                             for k in json_info:
                                 ds_ragsoc = ""
                                 addr = ""
                                 prov = ""
                                 loc = ""
                                 codloc = ""
+                                zip_cod = ""
                                 ds_ls_telefoni = []
                                 site_link = ""
                                 email = ""
@@ -117,9 +125,14 @@ class WorkerThread(QThread):
                                     pass
 
                                 try:
+                                    zip_cod = str(k["ds_cap"])
+                                except:
+                                    zip_cod = ""
+
+                                try:
                                     codloc = str(k["codloc"])
                                 except KeyError:
-                                    pass
+                                    codloc = ""
 
                                 try:
                                     ds_ls = k.get("ds_ls_telefoni", [])
@@ -132,7 +145,6 @@ class WorkerThread(QThread):
                                 try:
                                     site_link = k["extra"]["site_link"]["url"]
                                     
-
                                 except:
                                     site_link = ""
 
@@ -154,7 +166,7 @@ class WorkerThread(QThread):
                                     whatsapp = ""
 
                                 # Check if the data already exists
-                                data = [ds_ragsoc, addr, prov, loc, codloc, ds_ls_telefoni,whatsapp, email, site_link, p_link]
+                                data = [column_1, column_2, ds_ragsoc, addr, prov, loc, zip_cod, codloc, ds_ls_telefoni,whatsapp, email, site_link, p_link]
                                 existing_data.append(data)
                                 
                                 writer.writerow(data)
