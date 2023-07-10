@@ -40,7 +40,7 @@ source bin/activate
 3. Launch the scraper GUI by executing the following command:
    
 ```bash
-python scrapper.py
+python scraper.py
 ```
 4. Use the GUI to select the input CSV file containing the job professions and states.
    
